@@ -6,6 +6,7 @@ import droneIconi from './images/drone.png';
 import useFetchDroneData from './useFetchDroneData';
 import Timeline from './Timeline';
 import DroneInfo from './DroneInfo';
+import Filters from './Filters';
 
 const droneIcon = (size) => L.icon({
   iconUrl: droneIconi,
@@ -32,6 +33,7 @@ const MapComponent = () => {
   const [selectedDrone, setSelectedDrone] = useState(null);
   const [selectedTime, setSelectedTime] = useState(null);
   const [iconSize, setIconSize] = useState(50);
+  const [filters, setFilters] = useState({});
 
   useFetchDroneData(setDroneData, setMaxTime, setDroneColors, setCurrentTime, isPlaying);
 
@@ -74,6 +76,21 @@ const MapComponent = () => {
     setCurrentTime(Number(event.target.value));
   }, []);
 
+  const handleFilterChange = useCallback((newFilters) => {
+    setFilters(newFilters);
+  }, []);
+
+  const applyFilters = (drone) => {
+    const { position, altitude, speed, battery, flightMode, status } = filters;
+    const matchesPosition = !position || drone.position.includes(position);
+    const matchesAltitude = !altitude || drone.altitude === Number(altitude);
+    const matchesSpeed = !speed || drone.speed === Number(speed);
+    const matchesBattery = !battery || drone.battery === Number(battery);
+    const matchesFlightMode = !flightMode || drone.flight_mode.includes(flightMode);
+    const matchesStatus = !status || drone.status.includes(status);
+    return matchesPosition && matchesAltitude && matchesSpeed && matchesBattery && matchesFlightMode && matchesStatus;
+  };
+
   const MapClickHandler = () => {
     useMapEvent('click', () => setSelectedDrone(null));
     return null;
@@ -91,6 +108,9 @@ const MapComponent = () => {
 
   return (
     <div style={{ display: 'flex', height: '100vh' }}>
+      <div style={{ width: '20%' }}>
+        <Filters onFilterChange={handleFilterChange} />
+      </div>
       <MapContainer ref={mapRef} center={[39.4699, -0.3763]} zoom={6} style={{ height: '100%', width: selectedDrone ? '80%' : '100%' }}>
         <LayersControl position="topright">
           <LayersControl.BaseLayer checked name="OpenStreetMap">
@@ -115,16 +135,17 @@ const MapComponent = () => {
         </LayersControl>
         {Object.keys(droneData).map((droneId) => {
           const positions = droneData[droneId].filter(position => position.time_boot_ms <= currentTime);
-          const polylinePositions = positions.map(position => position.coordinates);
+          const filteredPositions = positions.filter(applyFilters);
+          const polylinePositions = filteredPositions.map(position => position.coordinates);
           const color = droneColors[droneId];
 
           return (
             <React.Fragment key={droneId}>
-              {positions.map((position, index) => (
+              {filteredPositions.map((position, index) => (
                 <Marker
                   key={index}
                   position={position.coordinates}
-                  icon={index === positions.length - 1 ? droneIcon(iconSize) : pointIcon}
+                  icon={index === filteredPositions.length - 1 ? droneIcon(iconSize) : pointIcon}
                   eventHandlers={{ click: () => setSelectedDrone(position) }}
                 />
               ))}
