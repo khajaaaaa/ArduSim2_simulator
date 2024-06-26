@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import MapComponent from "./MapComponent";
+import MapComponent from "./components/MapComponent";
 import './App.css';
 
 
