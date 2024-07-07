@@ -53,7 +53,7 @@ const DroneInfo = ({ selectedDrone, selectedTime, trajectory }) => {
             border: 'none',
             cursor: 'pointer'
           }}>Close 3D View</button>
-          <CesiumMap droneData={selectedDrone}  trajectory={trajectory || []} />
+          <CesiumMap droneData={selectedDrone} trajectory={trajectory || []} />
         </div>
       )}
     </div>

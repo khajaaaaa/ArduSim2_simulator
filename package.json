@@ -14,13 +14,17 @@
     "start:built": "npx http-server -a localhost -p 8080 dist/"
   },
   "dependencies": {
+    "@react-three/drei": "^9.108.1",
+    "@react-three/fiber": "^8.16.8",
     "autolinker": "^4.0.0",
     "cesium": "^1.118.2",
     "cors": "^2.8.5",
+    "express": "^4.19.2",
     "leaflet": "^1.9.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-leaflet": "^4.2.1"
+    "react-leaflet": "^4.2.1",
+    "three": "^0.166.1"
   },
   "browserslist": {
     "production": [
@@ -43,8 +47,19 @@
     "css-loader": "^6.8.1",
     "html-webpack-plugin": "^5.6.0",
     "style-loader": "^3.3.3",
+    "tailwindcss": "^3.4.4",
     "webpack": "^5.89.0",
     "webpack-cli": "^4.10.0",
-    "webpack-dev-server": "^4.15.1"
-  }
+    "webpack-dev-server": "^4.15.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/khajaaaaa/leaflet_map.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/khajaaaaa/leaflet_map/issues"
+  },
+  "homepage": "https://github.com/khajaaaaa/leaflet_map#readme"
 }
