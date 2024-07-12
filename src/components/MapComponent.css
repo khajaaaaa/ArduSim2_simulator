@@ -1,0 +1,137 @@
+#map-container {
+  height: 100%;
+  width: 100%;
+}
+
+#map {
+  height: 100%;
+  width: 100%;
+}
+
+drone-info-container {
+  width: 20%;
+  padding: 10px;
+  background-color: white;
+  border-left: 1px solid #ccc;
+}
+
+.drone-info-container h2 {
+  margin-top: 0;
+}
+
+.drone-info-container ul {
+  list-style: none;
+  padding: 0;
+}
+
+.drone-info-container ul li {
+  margin-bottom: 10px;
+}
+
+.drone-info-container .label {
+  font-weight: bold;
+}
+
+.drone-info-container button {
+  margin: 10px 0;
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.drone-info-container button:hover {
+  background-color: #0056b3;
+}
+
+/* Styles for the 3D view overlay */
+
+.cesium-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  z-index: 1000;
+}
+
+.cesium-overlay button {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 1001;
+  background-color: white;
+  padding: 10px;
+  border: none;
+  cursor: pointer;
+}
+
+.cesium-overlay button:hover {
+  background-color: #ddd;
+}
+
+
+
+
+
+
+/* Styles specific to Timeline component */
+.timeline-container {
+  position: fixed;
+  bottom: 10px;
+  left: 10%; /* Adjust to ensure it doesn't overlap with the drone info */
+  width: 80%; /* Adjust to ensure it doesn't overlap with the drone info */
+  text-align: center;
+  z-index: 1000;
+  padding: 10px 0;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.timeline-container input[type="range"] {
+  width: 80%;
+  margin: 10px 0;
+}
+
+.timeline-container div {
+  margin: 10px 0;
+}
+
+.timeline-container button {
+  margin: 5px;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: rgb(5, 5, 5);
+  border: none;
+  cursor: pointer;
+}
+
+.timeline-container button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.timeline-container button:hover:not(:disabled) {
+  background-color: #0056b3;
+}
+
+/* Media query to adjust layout on smaller screens */
+@media (max-width: 768px) {
+  .drone-info-container {
+    width: 100%;
+    border-left: none;
+    border-top: 1px solid #141313;
+    position: fixed;
+    bottom: 60px; /* Adjust as needed */
+    z-index: 999;
+    background-color: white;
+  }
+
+  .timeline-container {
+    left: 0;
+    width: 100%;
+    bottom: 10px;
+  }
+}
+

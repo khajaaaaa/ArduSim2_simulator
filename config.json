@@ -1,0 +1,7 @@
+{
+    "expressPort": 3001,
+    "udpPort": 9001,
+    "udpAddress": "192.168.101.146",
+    "webSocketPort": 8081
+  }
+  

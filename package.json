@@ -11,20 +11,24 @@
   "scripts": {
     "build": "webpack --config webpack.config.js",
     "start": "webpack serve --open --config webpack.config.js",
-    "start:built": "npx http-server -a localhost -p 8080 dist/"
+    "start:built": "npx http-server -a localhost -p 8080 dist/",
+    "start:server": "node server.js"
   },
   "dependencies": {
     "@react-three/drei": "^9.108.1",
     "@react-three/fiber": "^8.16.8",
+    "@tweenjs/tween.js": "^23.1.2",
     "autolinker": "^4.0.0",
     "cesium": "^1.118.2",
     "cors": "^2.8.5",
     "express": "^4.19.2",
+    "gsap": "^3.12.5",
     "leaflet": "^1.9.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-leaflet": "^4.2.1",
-    "three": "^0.166.1"
+    "react-router-dom": "^6.24.1",
+    "three": "^0.129.0"
   },
   "browserslist": {
     "production": [

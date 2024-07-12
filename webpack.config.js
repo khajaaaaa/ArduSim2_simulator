@@ -15,6 +15,7 @@ module.exports = {
     filename: "app.js",
     path: path.resolve(__dirname, "dist"),
     sourcePrefix: "",
+    publicPath: '/', // Ensure public path is set to root
   },
   resolve: {
     mainFiles: ["index", "Cesium"],
@@ -26,7 +27,7 @@ module.exports = {
         test: /\.jsx?$/,
         exclude: /node_modules/,
         use: {
-          loader: "babel-loader", // Add babel-loader for JSX
+          loader: "babel-loader",
           options: {
             presets: ["@babel/preset-env", "@babel/preset-react"],
           },
@@ -48,22 +49,11 @@ module.exports = {
     }),
     new CopyWebpackPlugin({
       patterns: [
-        {
-          from: path.join(cesiumSource, "Workers"),
-          to: `${cesiumBaseUrl}/Workers`,
-        },
-        {
-          from: path.join(cesiumSource, "ThirdParty"),
-          to: `${cesiumBaseUrl}/ThirdParty`,
-        },
-        {
-          from: path.join(cesiumSource, "Assets"),
-          to: `${cesiumBaseUrl}/Assets`,
-        },
-        {
-          from: path.join(cesiumSource, "Widgets"),
-          to: `${cesiumBaseUrl}/Widgets`,
-        },
+        { from: path.join(cesiumSource, "Workers"), to: `${cesiumBaseUrl}/Workers` },
+        { from: path.join(cesiumSource, "ThirdParty"), to: `${cesiumBaseUrl}/ThirdParty` },
+        { from: path.join(cesiumSource, "Assets"), to: `${cesiumBaseUrl}/Assets` },
+        { from: path.join(cesiumSource, "Widgets"), to: `${cesiumBaseUrl}/Widgets` },
+        { from: path.resolve(__dirname, "public/models"), to: "models" }, 
       ],
     }),
     new webpack.DefinePlugin({
@@ -72,4 +62,12 @@ module.exports = {
   ],
   mode: "development",
   devtool: "eval",
+  devServer: {
+    historyApiFallback: true,
+    static: {
+      directory: path.join(__dirname, 'dist'),
+    },
+    compress: true,
+    port: 9000,
+  },
 };

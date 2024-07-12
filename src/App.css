@@ -1,3 +1,6 @@
+
+
+/* Add your original App CSS and the new styles */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -25,8 +28,8 @@ html, body {
 }
 
 .logo {
-  width: 400px;  /* Increased width for the logo */
-  height: auto;  /* Maintain aspect ratio */
+  width: 400px;
+  height: auto;
   cursor: pointer;
   transition: transform 0.3s;
 }

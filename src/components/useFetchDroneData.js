@@ -2,7 +2,7 @@ import { useEffect, useRef, useCallback } from 'react';
 
 const colors = ['blue', 'red', 'green', 'orange', 'purple', 'brown', 'pink', 'yellow', 'cyan', 'magenta'];
 
-const useFetchDroneData = (setDroneData, setMaxTime, setDroneColors, setCurrentTime, isPlaying) => {
+const useFetchDroneData = (setDroneData, setMaxTime, setMinTime, setDroneColors, setCurrentTime, isPlaying) => {
   const previousDataRef = useRef(null);
 
   const fetchData = useCallback(async () => {
@@ -15,6 +15,7 @@ const useFetchDroneData = (setDroneData, setMaxTime, setDroneColors, setCurrentT
         // Handle case where data is empty
         setDroneData({});
         setMaxTime(0);
+        setMinTime(0); // Set minTime to 0 when data is empty
         setCurrentTime(0);
         setDroneColors({});
         return;
@@ -36,10 +37,13 @@ const useFetchDroneData = (setDroneData, setMaxTime, setDroneColors, setCurrentT
 
       const allTimes = data.map(item => item.time_boot_ms);
       const maxTime = Math.max(...allTimes);
+      const minTime = Math.min(...allTimes); // Calculate minTime
 
       if (JSON.stringify(previousDataRef.current) !== JSON.stringify(groupedData)) {
         setDroneData(groupedData);
         setMaxTime(maxTime);
+        setMinTime(minTime); // Set minTime
+
         setCurrentTime(maxTime); // Set current time to maxTime when new data is fetched
 
         const uniqueDroneIds = Object.keys(groupedData);
@@ -54,7 +58,7 @@ const useFetchDroneData = (setDroneData, setMaxTime, setDroneColors, setCurrentT
     } catch (error) {
       console.error('Failed to fetch data:', error.message);
     }
-  }, [setDroneData, setMaxTime, setDroneColors, setCurrentTime]);
+  }, [setDroneData, setMaxTime, setMinTime, setDroneColors, setCurrentTime]);
 
   useEffect(() => {
     fetchData(); // Fetch data initially

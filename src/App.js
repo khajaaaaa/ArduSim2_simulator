@@ -1,23 +1,21 @@
-import React, { useState } from "react";
+import React from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import MapComponent from "./components/MapComponent";
+import CardComponent from "./components/CardComponent";
+import CarInfo from './components/home';
 import './App.css';
-import Logo from './images/trace.svg';
 
 const App = () => {
-  const [show3DModel, setShow3DModel] = useState(false);
-
-  const handleLogoClick = () => {
-    setShow3DModel(true);
-  };
-
   return (
-    <div className="App">
-      {!show3DModel ? (
-        <img src={Logo} alt="Logo" className="logo" onClick={handleLogoClick} />
-      ) : (
-        <MapComponent />
-      )}
-    </div>
+    <Router>
+      <div className="App">
+        <Routes>
+          <Route path="/" element={<CardComponent />} />
+          <Route path="/map" element={<MapComponent />} />
+          <Route path="/home" element={<CarInfo />} />
+        </Routes>
+      </div>
+    </Router>
   );
 };
 

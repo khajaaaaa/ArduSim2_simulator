@@ -7,6 +7,7 @@ import useFetchDroneData from './useFetchDroneData';
 import Timeline from './Timeline';
 import DroneInfo from './DroneInfo';
 import Filters from './Filters';
+import './MapComponent.css'; 
 
 const droneIcon = (size) => L.icon({
   iconUrl: droneIconi,
@@ -26,6 +27,7 @@ const MapComponent = () => {
   const mapRef = useRef(null);
   const [droneData, setDroneData] = useState({});
   const [maxTime, setMaxTime] = useState(0);
+  const [minTime, setMinTime] = useState(0); // State for minTime
   const [currentTime, setCurrentTime] = useState(0);
   const [droneColors, setDroneColors] = useState({});
   const [isPlaying, setIsPlaying] = useState(false);
@@ -35,7 +37,7 @@ const MapComponent = () => {
   const [iconSize, setIconSize] = useState(50);
   const [filters, setFilters] = useState({});
 
-  useFetchDroneData(setDroneData, setMaxTime, setDroneColors, setCurrentTime, isPlaying);
+  useFetchDroneData(setDroneData, setMaxTime, setMinTime, setDroneColors, setCurrentTime, isPlaying);
 
   useEffect(() => {
     if (selectedDrone) {
@@ -69,9 +71,9 @@ const MapComponent = () => {
   }, [intervalId]);
 
   const resetSimulation = useCallback(() => {
-    setCurrentTime(maxTime); // Reset to the last fetched time
+    setCurrentTime(maxTime); // Reset to minTime when resetting simulation
   }, [maxTime]);
-
+  
   const handleTimeChange = useCallback((event) => {
     setCurrentTime(Number(event.target.value));
   }, []);
@@ -108,7 +110,7 @@ const MapComponent = () => {
 
   return (
     <div style={{ display: 'flex', height: '100vh' }}>
-      <div style={{ width: '20%' }}>
+      <div style={{ width: '0%' }}>
         <Filters onFilterChange={handleFilterChange} />
       </div>
       <MapContainer ref={mapRef} center={[39.4699, -0.3763]} zoom={6} style={{ height: '100%', width: selectedDrone ? '80%' : '100%' }}>
@@ -167,6 +169,7 @@ const MapComponent = () => {
       <Timeline
         currentTime={currentTime}
         maxTime={maxTime}
+        minTime={minTime} // Pass minTime to Timeline
         handleTimeChange={handleTimeChange}
         startSimulation={startSimulation}
         stopSimulation={stopSimulation}

@@ -15,9 +15,14 @@ import {
   IonResource,
   VelocityOrientationProperty,
   PathGraphics,
+  Ion,
+  createOsmBuildingsAsync
 } from "cesium";
 import "cesium/Build/Cesium/Widgets/widgets.css";
 import * as Cesium from "cesium";
+
+// Set your Cesium Ion access token here
+Ion.defaultAccessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5NjUyNGE3My0wMWI1LTQwODAtOTRhNy1iZTRhZWFlYTg1MDciLCJpZCI6MjIxNTMyLCJpYXQiOjE3MTgxMTE2MTh9.VbcSd8oL_HzCAbeJiwzWn3GJgQTy5r7izDWk9ewx7oQ";
 
 const CesiumMap = ({ droneData, trajectory }) => {
   const cesiumContainerRef = useRef(null);
@@ -27,19 +32,32 @@ const CesiumMap = ({ droneData, trajectory }) => {
   const deltaRadians = CesiumMath.toRadians(3.0);
 
   useEffect(() => {
-    const viewerInstance = new Viewer(cesiumContainerRef.current, {
-      shouldAnimate: true,
-    });
+    const initCesium = async () => {
+      const viewerInstance = new Viewer(cesiumContainerRef.current, {
+        terrain: Cesium.Terrain.fromWorldTerrain(),
+        infoBox: false,
+        selectionIndicator: false,
+        shadows: true,
+        shouldAnimate: true,
+      });
 
-    const canvas = viewerInstance.canvas;
-    canvas.setAttribute("tabindex", "0");
-    canvas.addEventListener("click", () => canvas.focus());
-    canvas.focus();
+      const osmBuildingsTileset = await createOsmBuildingsAsync();
+      viewerInstance.scene.primitives.add(osmBuildingsTileset);
 
-    setViewer(viewerInstance);
+      setViewer(viewerInstance);
+
+      const canvas = viewerInstance.canvas;
+      canvas.setAttribute("tabindex", "0");
+      canvas.addEventListener("click", () => canvas.focus());
+      canvas.focus();
+    };
+
+    initCesium();
 
     return () => {
-      viewerInstance.destroy();
+      if (viewer) {
+        viewer.destroy();
+      }
     };
   }, []);
 
@@ -76,8 +94,9 @@ const CesiumMap = ({ droneData, trajectory }) => {
       const initializeModel = async () => {
         try {
           const airplaneUri = await IonResource.fromAssetId(2634684);
+          console.log("Airplane URI:", airplaneUri);
           const planePrimitive = await Model.fromGltfAsync({
-            url: airplaneUri._url,
+            url: airplaneUri,
             modelMatrix: Transforms.headingPitchRollToFixedFrame(position, hpRoll, Ellipsoid.WGS84, fixedFrameTransform),
             minimumPixelSize: 128,
           });
@@ -135,7 +154,7 @@ const CesiumMap = ({ droneData, trajectory }) => {
       const flightData = trajectory.map(data => ({
         longitude: data.position.lon,
         latitude: data.position.lat,
-        height: data.position.alt,
+        height: data.position.alt+61,
         time: data.time_boot_ms,
         heading: data.position.heading,
       }));
@@ -168,7 +187,7 @@ const CesiumMap = ({ droneData, trajectory }) => {
         const airplaneUri = await IonResource.fromAssetId(2634684);
         const airplaneEntity = viewer.entities.add({
           position: positionProperty,
-          model: { uri: airplaneUri._url },
+          model: { uri: airplaneUri },
           orientation: new VelocityOrientationProperty(positionProperty),
           path: new PathGraphics({
             width: 2,

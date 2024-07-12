@@ -11,9 +11,13 @@ app.use(cors());
 app.options('*', cors());
 app.use(express.static(path.join(__dirname, 'src')));
 
+// Load configuration from config.json
+const configPath = path.join(__dirname, 'config.json');
+const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+
 const udpServer = dgram.createSocket('udp4');
 const wss = new WebSocket.Server({
-  port: 8081,
+  port: config.webSocketPort,
   handleProtocols: (protocols, request) => {
     cors()(request, {}, () => {});
     return protocols[0];
@@ -29,7 +33,7 @@ const validate = ajv.compile(schema);
 
 udpServer.on('message', (msg, rinfo) => {
   // Add the message and sender info to the queue
-  messageQueue.push({ msg, rinfo , ip: rinfo.address});
+  messageQueue.push({ msg, rinfo, ip: rinfo.address });
 });
 
 setInterval(() => {
@@ -51,7 +55,7 @@ setInterval(() => {
     let newData;
     try {
       newData = JSON.parse(msg.toString());
-      
+
       // Validate the JSON data against the schema
       const valid = validate(newData);
       if (!valid) {
@@ -76,11 +80,11 @@ setInterval(() => {
   let existingData = [];
   try {
     const fileData = fs.readFileSync(filePath, 'utf8');
-    
+
     // Check if the file is empty
     if (fileData.trim() !== '') {
       const parsedData = JSON.parse(fileData);
-  
+
       // Ensure that existingData is always an array
       existingData = Array.isArray(parsedData) ? parsedData : [parsedData];
     }
@@ -109,10 +113,12 @@ setInterval(() => {
   });
 }, 1000);
 
-app.listen(3001, () => {
-  console.log('Express server is running on port 3001');
+// Start Express server
+app.listen(config.expressPort, () => {
+  console.log(`Express server is running on port ${config.expressPort}`);
 });
 
-udpServer.bind(9877, () => {
-  console.log('UDP server is running and listening on port 9877');
+// Bind UDP server
+udpServer.bind(config.udpPort, config.udpAddress, () => {
+  console.log(`UDP server is running and listening on ${config.udpAddress}:${config.udpPort}`);
 });

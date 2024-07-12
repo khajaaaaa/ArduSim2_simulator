@@ -1,68 +1,103 @@
-import React, { useRef, useEffect } from 'react';
+// src/components/ThreeDModelComponent.jsx
+
+import React, { useEffect } from 'react';
 import * as THREE from 'three';
-import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import TWEEN from '@tweenjs/tween.js';
+
+import './ThreeScene.css'; // Assuming you have a CSS file for styling
 
 const ThreeDModelComponent = () => {
-  const mountRef = useRef(null);
+    useEffect(() => {
+        let width = window.innerWidth;
+        let height = window.innerHeight;
 
-  useEffect(() => {
-    const mount = mountRef.current;
-    const scene = new THREE.Scene();
+        // Create a Three.js Scene
+        const scene = new THREE.Scene();
 
-    const camera = new THREE.PerspectiveCamera(75, mount.clientWidth / mount.clientHeight, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true }); // Set alpha to true for transparency
-    renderer.setSize(mount.clientWidth, mount.clientHeight);
-    mount.appendChild(renderer.domElement);
+        // Create a Perspective Camera
+        const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
+        camera.position.set(5, 0, 1);
 
-    // Add lighting
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
-    scene.add(ambientLight);
+        // Add lights to the scene
+        const ambientLight = new THREE.AmbientLight(0x404040, 1);
+        scene.add(ambientLight);
 
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-    directionalLight.position.set(1, 1, 1).normalize();
-    scene.add(directionalLight);
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+        directionalLight.position.set(0, 1, 0);
+        directionalLight.castShadow = true;
+        scene.add(directionalLight);
 
-    // Load the 3D object
-    const loader = new OBJLoader();
-    loader.load(
-      '/models/CesiumDrone/uploads_files_3653841_Drone_Ob.obj',
-      (object) => {
-        object.position.set(0, 0, 0); // Adjust position as necessary
-        object.scale.set(0.1, 0.1, 0.1); // Adjust scale as necessary
-        scene.add(object);
-      },
-      (xhr) => {
-        console.log((xhr.loaded / xhr.total) * 100 + '% loaded');
-      },
-      (error) => {
-        console.error('An error happened', error);
-      }
+        const light1 = new THREE.PointLight(0xc4c4c4, 10);
+        light1.position.set(0, 300, 500);
+        scene.add(light1);
+
+        const light2 = new THREE.PointLight(0xc4c4c4, 10);
+        light2.position.set(500, 100, 0);
+        scene.add(light2);
+
+        const light3 = new THREE.PointLight(0xc4c4c4, 10);
+        light3.position.set(0, 100, -500);
+        scene.add(light3);
+
+        const light4 = new THREE.PointLight(0xc4c4c4, 10);
+        light4.position.set(-500, 300, 500);
+        scene.add(light4);
+
+        // Create a WebGLRenderer
+        const renderer = new THREE.WebGLRenderer({ alpha: true });
+        renderer.setSize(width, height);
+
+        // Append renderer to the DOM
+        const canvasContainer = document.getElementById('threejs-container');
+        canvasContainer.appendChild(renderer.domElement);
+
+        // OrbitControls
+        const controls = new OrbitControls(camera, renderer.domElement);
+
+        // Load 3D model
+        const loader = new GLTFLoader();
+        loader.load(
+            'models/dro.glb',
+            function (gltf) {
+                const object = gltf.scene;
+                scene.add(object);
+            },
+            undefined,
+            function (error) {
+                console.error(error);
+            }
+        );
+
+        // Animation loop
+        function animate() {
+            requestAnimationFrame(animate);
+            renderer.render(scene, camera);
+            TWEEN.update();
+        }
+        animate();
+
+        // Handle window resize
+        window.addEventListener("resize", function () {
+            width = window.innerWidth;
+            height = window.innerHeight;
+            camera.aspect = width / height;
+            camera.updateProjectionMatrix();
+            renderer.setSize(width, height);
+        });
+
+        return () => {
+            // Clean up resources
+            window.removeEventListener("resize");
+        };
+    }, []);
+
+    return (
+        <div className="threejs-scene">
+            <div id="threejs-container"></div>
+        </div>
     );
-
-    camera.position.z = 5;
-
-    const animate = () => {
-      requestAnimationFrame(animate);
-      renderer.render(scene, camera);
-    };
-
-    const onWindowResize = () => {
-      camera.aspect = mount.clientWidth / mount.clientHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(mount.clientWidth, mount.clientHeight);
-    };
-
-    window.addEventListener('resize', onWindowResize);
-
-    animate();
-
-    return () => {
-      window.removeEventListener('resize', onWindowResize);
-      mount.removeChild(renderer.domElement);
-    };
-  }, []);
-
-  return <div ref={mountRef} style={{ width: '100%', height: '500px' }} />;
 };
 
 export default ThreeDModelComponent;
