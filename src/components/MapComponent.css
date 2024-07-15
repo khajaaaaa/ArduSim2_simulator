@@ -8,11 +8,15 @@
   width: 100%;
 }
 
-drone-info-container {
-  width: 20%;
+.drone-info-container {
+  width: 300px; /* Set a fixed width */
   padding: 10px;
-  background-color: white;
+  background-color: #0056b3;
   border-left: 1px solid #ccc;
+  position: absolute; /* Position it absolutely */
+  top: 100px; /* Adjust the top position as needed */
+  left: 20px; /* Adjust the right position as needed */
+  z-index: 1000;
 }
 
 .drone-info-container h2 {
@@ -71,6 +75,8 @@ drone-info-container {
 .cesium-overlay button:hover {
   background-color: #ddd;
 }
+
+
 
 
 

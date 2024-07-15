@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import MapComponent from "./components/MapComponent";
 import CardComponent from "./components/CardComponent";
 import CarInfo from './components/home';
-import './App.css';
+import './css/App.css';
 
 const App = () => {
   return (

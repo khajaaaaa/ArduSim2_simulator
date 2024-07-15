@@ -1,13 +1,15 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
-import { MapContainer, TileLayer, Marker, Polyline, LayersControl, useMapEvent, useMap } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Polyline, LayersControl, useMapEvent, useMap, FeatureGroup } from 'react-leaflet';
+import { EditControl } from "react-leaflet-draw";
 import 'leaflet/dist/leaflet.css';
+import 'leaflet-draw/dist/leaflet.draw.css';
 import L from 'leaflet';
 import droneIconi from '../images/drone.png';
 import useFetchDroneData from './useFetchDroneData';
 import Timeline from './Timeline';
 import DroneInfo from './DroneInfo';
 import Filters from './Filters';
-import './MapComponent.css'; 
+import './MapComponent.css';
 
 const droneIcon = (size) => L.icon({
   iconUrl: droneIconi,
@@ -23,11 +25,13 @@ const pointIcon = L.divIcon({
   iconSize: [10, 10],
 });
 
+
 const MapComponent = () => {
   const mapRef = useRef(null);
+  const drawnItems = useRef(new L.FeatureGroup());
   const [droneData, setDroneData] = useState({});
   const [maxTime, setMaxTime] = useState(0);
-  const [minTime, setMinTime] = useState(0); // State for minTime
+  const [minTime, setMinTime] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
   const [droneColors, setDroneColors] = useState({});
   const [isPlaying, setIsPlaying] = useState(false);
@@ -36,6 +40,8 @@ const MapComponent = () => {
   const [selectedTime, setSelectedTime] = useState(null);
   const [iconSize, setIconSize] = useState(50);
   const [filters, setFilters] = useState({});
+
+  const [distance, setDistance] = useState(null); // State for distance
 
   useFetchDroneData(setDroneData, setMaxTime, setMinTime, setDroneColors, setCurrentTime, isPlaying);
 
@@ -71,9 +77,9 @@ const MapComponent = () => {
   }, [intervalId]);
 
   const resetSimulation = useCallback(() => {
-    setCurrentTime(maxTime); // Reset to minTime when resetting simulation
+    setCurrentTime(maxTime);
   }, [maxTime]);
-  
+
   const handleTimeChange = useCallback((event) => {
     setCurrentTime(Number(event.target.value));
   }, []);
@@ -108,6 +114,37 @@ const MapComponent = () => {
     return null;
   };
 
+  const onCreated = (e) => {
+    const { layerType, layer } = e;
+    const drawnItemsLayer = drawnItems.current;
+
+    drawnItemsLayer.addLayer(layer);
+
+    if (layerType === 'polyline') {
+      const latlngs = layer.getLatLngs();
+      if (latlngs.length > 1) {
+        const distance = latlngs.reduce((acc, curr, idx, arr) => {
+          if (idx === 0) return acc;
+          return acc + arr[idx - 1].distanceTo(curr);
+        }, 0);
+        setDistance(distance);
+        alert(`Distance: ${distance.toFixed(2)} meters`);
+      }
+    }
+
+    if (layerType === 'circle') {
+      const radius = layer.getRadius();
+      alert(`Circle radius: ${radius.toFixed(2)} meters`);
+    }
+  };
+
+  const onDeleted = (e) => {
+    const layers = e.layers;
+    layers.eachLayer((layer) => {
+      drawnItems.current.removeLayer(layer);
+    });
+  };
+
   return (
     <div style={{ display: 'flex', height: '100vh' }}>
       <div style={{ width: '0%' }}>
@@ -135,6 +172,21 @@ const MapComponent = () => {
             />
           </LayersControl.BaseLayer>
         </LayersControl>
+        <FeatureGroup ref={drawnItems}>
+          <EditControl
+            position="topright"
+            onCreated={onCreated}
+            onDeleted={onDeleted}
+            draw={{
+              rectangle: true,
+              polyline: true,
+              circle: true,
+              marker: false,
+              polygon: true,
+              circlemarker: false,
+            }}
+          />
+        </FeatureGroup>
         {Object.keys(droneData).map((droneId) => {
           const positions = droneData[droneId].filter(position => position.time_boot_ms <= currentTime);
           const filteredPositions = positions.filter(applyFilters);
@@ -158,7 +210,6 @@ const MapComponent = () => {
         <MapClickHandler />
         {selectedDrone && <ZoomHandler position={selectedDrone.coordinates} />}
       </MapContainer>
-
       {selectedDrone && (
         <DroneInfo
           selectedDrone={selectedDrone}
@@ -169,7 +220,7 @@ const MapComponent = () => {
       <Timeline
         currentTime={currentTime}
         maxTime={maxTime}
-        minTime={minTime} // Pass minTime to Timeline
+        minTime={minTime}
         handleTimeChange={handleTimeChange}
         startSimulation={startSimulation}
         stopSimulation={stopSimulation}

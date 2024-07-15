@@ -7,18 +7,24 @@ import TWEEN from 'https://cdn.jsdelivr.net/npm/@tweenjs/tween.js@18.5.0/dist/tw
 
 const CarInfo = () => {
   useEffect(() => {
-    const canvasform = document.getElementById('dCanvas');
-    let width = canvasform.offsetWidth;
-    let height = canvasform.offsetHeight;
+    const canvasContainer = document.getElementById('dCanvasContainer');
+    const canvas = document.createElement('canvas');
+    canvas.id = 'dCanvas';
+    canvasContainer.appendChild(canvas);
+
+    let width = canvasContainer.clientWidth;
+    let height = canvasContainer.clientHeight;
 
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
     camera.position.set(5, 0, 1);
-    const renderer = new THREE.WebGLRenderer({ alpha: true });
+
+    const renderer = new THREE.WebGLRenderer({ canvas, alpha: true });
     renderer.setSize(width, height);
-    document.getElementById('dCanvas').appendChild(renderer.domElement);
 
     const controls = new OrbitControls(camera, renderer.domElement);
+    controls.update();
+
     const ambientLight = new THREE.AmbientLight(0x404040, 1);
     scene.add(ambientLight);
 
@@ -27,21 +33,21 @@ const CarInfo = () => {
     directionalLight.castShadow = true;
     scene.add(directionalLight);
 
-    const light = new THREE.PointLight(0xc4c4c4, 10);
-    light.position.set(0, 300, 500);
-    scene.add(light);
+    const lights = [];
+    lights[0] = new THREE.PointLight(0xc4c4c4, 10, 0);
+    lights[1] = new THREE.PointLight(0xc4c4c4, 10, 0);
+    lights[2] = new THREE.PointLight(0xc4c4c4, 10, 0);
+    lights[3] = new THREE.PointLight(0xc4c4c4, 10, 0);
 
-    const light2 = new THREE.PointLight(0xc4c4c4, 10);
-    light2.position.set(500, 100, 0);
-    scene.add(light2);
+    lights[0].position.set(0, 300, 500);
+    lights[1].position.set(500, 100, 0);
+    lights[2].position.set(0, 100, -500);
+    lights[3].position.set(-500, 300, 500);
 
-    const light3 = new THREE.PointLight(0xc4c4c4, 10);
-    light3.position.set(0, 100, -500);
-    scene.add(light3);
-
-    const light4 = new THREE.PointLight(0xc4c4c4, 10);
-    light4.position.set(-500, 300, 500);
-    scene.add(light4);
+    scene.add(lights[0]);
+    scene.add(lights[1]);
+    scene.add(lights[2]);
+    scene.add(lights[3]);
 
     const loader = new GLTFLoader();
     loader.load(
@@ -49,20 +55,14 @@ const CarInfo = () => {
       function (gltf) {
         console.log('Model loaded successfully');
         const object = gltf.scene;
-    
-        // Scale the object if needed
-        object.scale.set(6.5, 6.5, 6.5); // Example scaling
-    
-        // Adjust the position of the loaded object if necessary
-        object.position.set(0, 0, 0); // Example positioning
-    
+        object.scale.set(6.5, 6.5, 6.5);
+        object.position.set(0, 0, 0);
+
         scene.add(object);
-    
-        // Adjust the camera position and angle
-        camera.position.set(5, 2, 5); // Example camera position
-        camera.lookAt(object.position); // Make the camera look at the loaded object
-    
-        // Ensure renderer is called initially after model load
+
+        camera.position.set(5, 2, 5);
+        camera.lookAt(object.position);
+
         renderer.render(scene, camera);
       },
       undefined,
@@ -70,8 +70,7 @@ const CarInfo = () => {
         console.error('An error happened while loading the model', error);
       }
     );
-    
-    
+
     function animate() {
       requestAnimationFrame(animate);
       renderer.render(scene, camera);
@@ -80,14 +79,14 @@ const CarInfo = () => {
     animate();
 
     window.addEventListener('resize', () => {
-      width = canvasform.offsetWidth;
-      height = canvasform.offsetHeight;
+      width = canvasContainer.clientWidth;
+      height = canvasContainer.clientHeight;
       camera.aspect = width / height;
       camera.updateProjectionMatrix();
       renderer.setSize(width, height);
     });
 
-    const btnshowmore = document.getElementById('showmore');
+    const btnShowMore = document.getElementById('showmore');
     const slider = document.querySelector('.slider');
     let statusContent = 'contentOne';
 
@@ -104,7 +103,7 @@ const CarInfo = () => {
         .start();
     }
 
-    btnshowmore.onclick = () => {
+    btnShowMore.onclick = () => {
       slider.classList.remove('contentOneAction');
       slider.classList.remove('contentTwoAction');
       switch (statusContent) {
@@ -135,7 +134,7 @@ const CarInfo = () => {
         <div></div>
       </header>
       <div className="slider contentOneAction">
-        <div id="dCanvas"></div>
+        <div id="dCanvasContainer" style={{ width: '100%', height: '100vh' }}></div>
         <div className="contentOne">
           <h1>SF90 STRADALE</h1>
           <div className="des">
