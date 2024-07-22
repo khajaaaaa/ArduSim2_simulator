@@ -6,8 +6,8 @@
 ## Installation:
 
 1. Clone the repository:
-    git clone https://github.com/khajaaaaa/leaflet_map.git
-    cd leaflet_map
+    https://github.com/khajaaaaa/ArduSim2_simulator.git
+    cd ArduSim2_simulator
 
 2. Install dependencies:
     npm install
