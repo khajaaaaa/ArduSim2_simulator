@@ -1,25 +1,32 @@
-# cesium-webpack-example
+# ArduSim2 simulator
 
-A minimal recommended setup for an applications using [Cesium](https://cesium.com) with [Webpack 5](https://webpack.js.org/concepts/).
-
-## Running this application
-
-```sh
-npm install
-npm start
-# for the built version
-npm run build
-npm run start:built
-```
-
-Navigate to `localhost:8080`.
-
-### Available scripts
-
-- `npm start` - Runs a webpack build with `webpack.config.js` and starts a development server at `localhost:8080`
-- `npm run build` - Runs a webpack build with `webpack.config.js`
-- `npm run start:built` - Start a small static server using `http-server` to demonstrate hosting the built version
-
-## Requiring Cesium in your application
+# Description
 
 
+## Installation:
+
+1. Clone the repository:
+    git clone https://github.com/khajaaaaa/leaflet_map.git
+    cd leaflet_map
+
+2. Install dependencies:
+    npm install
+
+## Running the Application :
+
+# Running with Docker :
+
+    1.Build and run the Docker container:
+        docker-compose up --build
+
+# Running without Docker :
+
+    1.Start the Node.js server:
+        npm run start:server 
+        or 
+        node server.js
+
+    2.Start the React application:
+        npm start
+
+# Directory Structure :
