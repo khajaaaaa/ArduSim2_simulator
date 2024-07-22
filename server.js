@@ -7,6 +7,7 @@ const fs = require('fs');
 const path = require('path');
 const Ajv = require('ajv');
 
+// Apply CORS middleware to all routes
 app.use(cors());
 app.options('*', cors());
 app.use(express.static(path.join(__dirname, 'src')));
@@ -23,7 +24,10 @@ const wss = new WebSocket.Server({
     return protocols[0];
   }
 });
+
 let messageQueue = [];
+let clients = []; // Track WebSocket clients
+let inactivityTimeout;
 
 // Load JSON schema
 const schemaFilePath = path.join(__dirname, 'json_scheme.txt');
@@ -31,7 +35,38 @@ const schema = JSON.parse(fs.readFileSync(schemaFilePath, 'utf8'));
 const ajv = new Ajv();
 const validate = ajv.compile(schema);
 
+// WebSocket connection handling
+wss.on('connection', (ws) => {
+  clients.push(ws);
+
+  // Handle WebSocket disconnection
+  ws.on('close', () => {
+    // Remove from clients array
+    clients = clients.filter(client => client !== ws);
+
+    // Clear data.json file if no clients are connected
+    if (clients.length === 0) {
+      clearDataFile();
+    }
+  });
+});
+
+function clearDataFile() {
+  const filePath = path.join(__dirname, 'src', 'data.json');
+  try {
+    fs.writeFileSync(filePath, JSON.stringify([])); // Write an empty array to the file
+    console.log('Data file emptied');
+    // Notify clients to refresh the page
+    broadcast({ type: 'refresh' });
+  } catch (err) {
+    console.error('Error emptying data file:', err);
+  }
+}
+
 udpServer.on('message', (msg, rinfo) => {
+  // Reset inactivity timer
+  resetInactivityTimer();
+
   // Add the message and sender info to the queue
   messageQueue.push({ msg, rinfo, ip: rinfo.address });
 });
@@ -112,6 +147,51 @@ setInterval(() => {
     }
   });
 }, 1000);
+
+// Reset inactivity timer
+function resetInactivityTimer() {
+  if (inactivityTimeout) {
+    clearTimeout(inactivityTimeout);
+  }
+  inactivityTimeout = setTimeout(() => {
+    clearDataFile();
+  }, 60000); // 1 minute
+}
+
+// Broadcast message to all WebSocket clients
+function broadcast(message) {
+  wss.clients.forEach((client) => {
+    if (client.readyState === WebSocket.OPEN) {
+      client.send(JSON.stringify(message));
+    }
+  });
+}
+
+// Handle process termination signals
+process.on('SIGINT', () => {
+  console.log('Server terminated by SIGINT');
+  cleanupAndExit();
+});
+
+process.on('SIGTERM', () => {
+  console.log('Server terminated by SIGTERM');
+  cleanupAndExit();
+});
+
+function cleanupAndExit() {
+  // Clear data.json file before exiting
+  clearDataFile();
+  // Close UDP server
+  udpServer.close(() => {
+    console.log('UDP server closed');
+    // Close WebSocket server
+    wss.close(() => {
+      console.log('WebSocket server closed');
+      // Exit process
+      process.exit(0);
+    });
+  });
+}
 
 // Start Express server
 app.listen(config.expressPort, () => {

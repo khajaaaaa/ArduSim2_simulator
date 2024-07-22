@@ -25,7 +25,6 @@ const pointIcon = L.divIcon({
   iconSize: [10, 10],
 });
 
-
 const MapComponent = () => {
   const mapRef = useRef(null);
   const drawnItems = useRef(new L.FeatureGroup());
@@ -40,22 +39,31 @@ const MapComponent = () => {
   const [selectedTime, setSelectedTime] = useState(null);
   const [iconSize, setIconSize] = useState(50);
   const [filters, setFilters] = useState({});
-
-  const [distance, setDistance] = useState(null); // State for distance
+  const [distance, setDistance] = useState(null);
+  const [isScrubbing, setIsScrubbing] = useState(false);
 
   useFetchDroneData(setDroneData, setMaxTime, setMinTime, setDroneColors, setCurrentTime, isPlaying);
 
   useEffect(() => {
-    if (selectedDrone) {
+    if (selectedDrone && droneData[selectedDrone.drone_id]) {
       const updatedDrone = droneData[selectedDrone.drone_id]
         .slice()
         .sort((a, b) => Math.abs(currentTime - a.time_boot_ms) - Math.abs(currentTime - b.time_boot_ms))[0];
       setSelectedDrone(updatedDrone);
       setSelectedTime(currentTime);
+    } else {
+      setSelectedDrone(null);
+      setSelectedTime(null);
     }
   }, [droneData, selectedDrone, currentTime]);
 
-  const startSimulation = () => {
+  useEffect(() => {
+    if (minTime !== 0) {
+      setCurrentTime(minTime);
+    }
+  }, [minTime]);
+
+  const startSimulation = useCallback(() => {
     setIsPlaying(true);
     const id = setInterval(() => {
       setCurrentTime((prevTime) => {
@@ -69,20 +77,48 @@ const MapComponent = () => {
       });
     }, 1000);
     setIntervalId(id);
-  };
+  }, [maxTime]);
 
   const stopSimulation = useCallback(() => {
-    setIsPlaying(false);
-    clearInterval(intervalId);
-  }, [intervalId]);
+    setIsPlaying(true);
+    const id = setInterval(() => {
+      setCurrentTime((prevTime) => {
+        if (prevTime < maxTime) {
+          return prevTime;
+        } else {
+          clearInterval(id);
+          setIsPlaying(false);
+          return prevTime;
+        }
+      });
+    }, 1000);
+    setIntervalId(id);
+  }, [maxTime]);
 
   const resetSimulation = useCallback(() => {
     setCurrentTime(maxTime);
-  }, [maxTime]);
+    setIsPlaying(false);
+    if (intervalId) {
+      clearInterval(intervalId);
+      setIntervalId(null);
+    }
+  }, [maxTime, intervalId]);
 
   const handleTimeChange = useCallback((event) => {
-    setCurrentTime(Number(event.target.value));
-  }, []);
+    const newTime = Number(event.target.value);
+    setCurrentTime(newTime);
+    setIsScrubbing(true);
+    if (isPlaying) {
+      stopSimulation();
+    }
+  }, [isPlaying, stopSimulation]);
+
+  const handleScrubEnd = useCallback(() => {
+    setIsScrubbing(false);
+    if (isPlaying) {
+      startSimulation();
+    }
+  }, [isPlaying, startSimulation]);
 
   const handleFilterChange = useCallback((newFilters) => {
     setFilters(newFilters);
@@ -150,7 +186,7 @@ const MapComponent = () => {
       <div style={{ width: '0%' }}>
         <Filters onFilterChange={handleFilterChange} />
       </div>
-      <MapContainer ref={mapRef} center={[39.4699, -0.3763]} zoom={6} style={{ height: '100%', width: selectedDrone ? '80%' : '100%' }}>
+      <MapContainer ref={mapRef} center={[39.4699, -0.3763]} zoom={6} style={{ height: '100%', width: selectedDrone ? '60%' : '100%' }}>
         <LayersControl position="topright">
           <LayersControl.BaseLayer checked name="OpenStreetMap">
             <TileLayer
@@ -210,7 +246,7 @@ const MapComponent = () => {
         <MapClickHandler />
         {selectedDrone && <ZoomHandler position={selectedDrone.coordinates} />}
       </MapContainer>
-      {selectedDrone && (
+      {selectedDrone && droneData[selectedDrone.drone_id] && (
         <DroneInfo
           selectedDrone={selectedDrone}
           selectedTime={selectedTime}
@@ -226,6 +262,7 @@ const MapComponent = () => {
         stopSimulation={stopSimulation}
         resetSimulation={resetSimulation}
         isPlaying={isPlaying}
+        handleScrubEnd={handleScrubEnd}
       />
     </div>
   );

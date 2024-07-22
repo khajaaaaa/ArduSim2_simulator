@@ -15,13 +15,16 @@ const useFetchDroneData = (setDroneData, setMaxTime, setMinTime, setDroneColors,
         // Handle case where data is empty
         setDroneData({});
         setMaxTime(0);
-        setMinTime(0); // Set minTime to 0 when data is empty
+        setMinTime(0);
         setCurrentTime(0);
         setDroneColors({});
         return;
       }
 
-      const groupedData = data.reduce((acc, item) => {
+      // Filter out entries with zero timestamps
+      const filteredData = data.filter(item => item.time_boot_ms > 0);
+
+      const groupedData = filteredData.reduce((acc, item) => {
         if (!acc[item.drone_id]) acc[item.drone_id] = [];
         acc[item.drone_id].push({
           ...item,
@@ -35,16 +38,18 @@ const useFetchDroneData = (setDroneData, setMaxTime, setMinTime, setDroneColors,
         groupedData[droneId].sort((a, b) => a.time_boot_ms - b.time_boot_ms);
       }
 
-      const allTimes = data.map(item => item.time_boot_ms);
+      const allTimes = filteredData.map(item => item.time_boot_ms);
       const maxTime = Math.max(...allTimes);
-      const minTime = Math.min(...allTimes); // Calculate minTime
+      const minTime = Math.min(...allTimes);
 
       if (JSON.stringify(previousDataRef.current) !== JSON.stringify(groupedData)) {
         setDroneData(groupedData);
         setMaxTime(maxTime);
-        setMinTime(minTime); // Set minTime
+        setMinTime(minTime);
 
-        setCurrentTime(maxTime); // Set current time to maxTime when new data is fetched
+        if (!isPlaying) {
+          setCurrentTime(maxTime);
+        }
 
         const uniqueDroneIds = Object.keys(groupedData);
         const colorMap = {};
@@ -57,8 +62,14 @@ const useFetchDroneData = (setDroneData, setMaxTime, setMinTime, setDroneColors,
       previousDataRef.current = groupedData;
     } catch (error) {
       console.error('Failed to fetch data:', error.message);
+      // Handle fetch error
+      setDroneData({});
+      setMaxTime(0);
+      setMinTime(0);
+      setCurrentTime(0);
+      setDroneColors({});
     }
-  }, [setDroneData, setMaxTime, setMinTime, setDroneColors, setCurrentTime]);
+  }, [setDroneData, setMaxTime, setMinTime, setDroneColors, setCurrentTime, isPlaying]);
 
   useEffect(() => {
     fetchData(); // Fetch data initially

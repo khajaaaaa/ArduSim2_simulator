@@ -1,9 +1,7 @@
 import React from 'react';
 import './MapComponent.css';
 
-const Timeline = ({ currentTime, maxTime, minTime, handleTimeChange, startSimulation, stopSimulation, resetSimulation, isPlaying }) => {
-  const timePercentage = ((currentTime - minTime) / (maxTime - minTime)) * 100;
-
+const Timeline = ({ currentTime, maxTime, minTime, handleTimeChange, startSimulation, stopSimulation, resetSimulation, isPlaying, handleScrubEnd }) => {
   return (
     <div className="timeline-container">
       <input
@@ -12,10 +10,11 @@ const Timeline = ({ currentTime, maxTime, minTime, handleTimeChange, startSimula
         max={maxTime}
         value={currentTime}
         onChange={handleTimeChange}
+        onMouseUp={handleScrubEnd}
       />
       <div>Current Time: {currentTime}</div>
-      <button onClick={startSimulation} disabled={isPlaying}>Play Simulation</button>
-      <button onClick={stopSimulation} disabled={!isPlaying}>Stop Simulation</button>
+      <button onClick={startSimulation} >Play Simulation</button>
+      <button onClick={stopSimulation}>Stop Simulation</button>
       <button onClick={resetSimulation}>Reset Simulation</button>
     </div>
   );
