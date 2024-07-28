@@ -74,7 +74,7 @@ const useFetchDroneData = (setDroneData, setMaxTime, setMinTime, setDroneColors,
   useEffect(() => {
     fetchData(); // Fetch data initially
 
-    const interval = setInterval(fetchData, 5000); // Fetch data every 5 seconds
+    const interval = setInterval(fetchData, 100); // Fetch data every 5 seconds
     return () => clearInterval(interval); // Cleanup interval on component unmount or dependency change
   }, [fetchData, isPlaying]); // Trigger fetchData on isPlaying change or initial load
 };

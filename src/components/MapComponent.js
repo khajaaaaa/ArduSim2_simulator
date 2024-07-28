@@ -68,7 +68,7 @@ const MapComponent = () => {
     const id = setInterval(() => {
       setCurrentTime((prevTime) => {
         if (prevTime < maxTime) {
-          return prevTime + 1000;
+          return prevTime + 500;
         } else {
           clearInterval(id);
           setIsPlaying(false);
@@ -236,7 +236,7 @@ const MapComponent = () => {
                   key={index}
                   position={position.coordinates}
                   icon={index === filteredPositions.length - 1 ? droneIcon(iconSize) : pointIcon}
-                  eventHandlers={{ click: () => setSelectedDrone(position) }}
+                  eventHandlers={{ click: () => setSelectedDrone({ ...position, drone_id: droneId }) }}
                 />
               ))}
               {polylinePositions.length > 0 && <Polyline positions={polylinePositions} color={color} />}

@@ -67,6 +67,7 @@
   left: 10px;
   z-index: 1001;
   background-color: white;
+  text-emphasis-color: black;
   padding: 10px;
   border: none;
   cursor: pointer;
@@ -90,6 +91,7 @@
   left: 10%; /* Adjust to ensure it doesn't overlap with the drone info */
   width: 80%; /* Adjust to ensure it doesn't overlap with the drone info */
   text-align: center;
+  text-emphasis-color: black;
   z-index: 1000;
   padding: 10px 0;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);

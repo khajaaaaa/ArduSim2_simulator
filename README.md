@@ -6,8 +6,8 @@
 ## Installation:
 
 1. Clone the repository:
-    https://github.com/khajaaaaa/ArduSim2_simulator.git
-    cd ArduSim2_simulator
+   - https://github.com/khajaaaaa/ArduSim2_simulator.git
+   - cd ArduSim2_simulator
 
 2. Install dependencies:
     npm install
@@ -17,7 +17,7 @@
 # Running with Docker :
 
     1.Build and run the Docker container:
-        docker-compose up --build
+       - docker-compose up --build
 
 # Running without Docker :
 
