@@ -38890,5 +38890,404 @@
     },
     "status": "OK",
     "flight_mode": "GUIDED Custom mode; guided mode; Stabilize; Manual input; Armed"
+  },
+  {
+    "nr_gps_online": 2,
+    "position": {
+      "heading": 169.55,
+      "alt": 15.08,
+      "relative_alt": 15,
+      "lon": -0.3459351,
+      "lat": 39.4812383
+    },
+    "type": "MAV_TYPE_QUADROTOR",
+    "battery": 0,
+    "version": "4.5.3",
+    "time_boot_ms": 1851055,
+    "speed": {
+      "vx": 0.01,
+      "vy": -0.01,
+      "vz": 0
+    },
+    "status": "OK",
+    "flight_mode": "GUIDED Custom mode; guided mode; Stabilize; Manual input; Armed"
+  },
+  {
+    "nr_gps_online": 2,
+    "position": {
+      "heading": 169.55,
+      "alt": 15.08,
+      "relative_alt": 15,
+      "lon": -0.3459351,
+      "lat": 39.4812383
+    },
+    "type": "MAV_TYPE_QUADROTOR",
+    "battery": 0,
+    "version": "4.5.3",
+    "time_boot_ms": 1852055,
+    "speed": {
+      "vx": 0.01,
+      "vy": -0.01,
+      "vz": 0
+    },
+    "status": "OK",
+    "flight_mode": "GUIDED Custom mode; guided mode; Stabilize; Manual input; Armed"
+  },
+  {
+    "nr_gps_online": 2,
+    "position": {
+      "heading": 169.54,
+      "alt": 15.08,
+      "relative_alt": 15,
+      "lon": -0.3459351,
+      "lat": 39.4812383
+    },
+    "type": "MAV_TYPE_QUADROTOR",
+    "battery": 0,
+    "version": "4.5.3",
+    "time_boot_ms": 1853055,
+    "speed": {
+      "vx": 0.01,
+      "vy": -0.01,
+      "vz": 0
+    },
+    "status": "OK",
+    "flight_mode": "GUIDED Custom mode; guided mode; Stabilize; Manual input; Armed"
+  },
+  {
+    "nr_gps_online": 2,
+    "position": {
+      "heading": 169.55,
+      "alt": 15.08,
+      "relative_alt": 15,
+      "lon": -0.3459351,
+      "lat": 39.4812383
+    },
+    "type": "MAV_TYPE_QUADROTOR",
+    "battery": 0,
+    "version": "4.5.3",
+    "time_boot_ms": 1854055,
+    "speed": {
+      "vx": 0.01,
+      "vy": -0.01,
+      "vz": 0
+    },
+    "status": "OK",
+    "flight_mode": "GUIDED Custom mode; guided mode; Stabilize; Manual input; Armed"
+  },
+  {
+    "nr_gps_online": 2,
+    "position": {
+      "heading": 169.55,
+      "alt": 15.08,
+      "relative_alt": 15,
+      "lon": -0.3459351,
+      "lat": 39.4812383
+    },
+    "type": "MAV_TYPE_QUADROTOR",
+    "battery": 0,
+    "version": "4.5.3",
+    "time_boot_ms": 1855055,
+    "speed": {
+      "vx": 0.01,
+      "vy": -0.01,
+      "vz": 0
+    },
+    "status": "OK",
+    "flight_mode": "GUIDED Custom mode; guided mode; Stabilize; Manual input; Armed"
+  },
+  {
+    "nr_gps_online": 2,
+    "position": {
+      "heading": 169.54,
+      "alt": 15.08,
+      "relative_alt": 15,
+      "lon": -0.3459351,
+      "lat": 39.4812383
+    },
+    "type": "MAV_TYPE_QUADROTOR",
+    "battery": 0,
+    "version": "4.5.3",
+    "time_boot_ms": 1856057,
+    "speed": {
+      "vx": 0.01,
+      "vy": -0.01,
+      "vz": 0
+    },
+    "status": "OK",
+    "flight_mode": "GUIDED Custom mode; guided mode; Stabilize; Manual input; Armed"
+  },
+  {
+    "nr_gps_online": 2,
+    "position": {
+      "heading": 169.55,
+      "alt": 15.08,
+      "relative_alt": 15,
+      "lon": -0.3459351,
+      "lat": 39.4812383
+    },
+    "type": "MAV_TYPE_QUADROTOR",
+    "battery": 0,
+    "version": "4.5.3",
+    "time_boot_ms": 1857055,
+    "speed": {
+      "vx": 0.01,
+      "vy": -0.01,
+      "vz": 0
+    },
+    "status": "OK",
+    "flight_mode": "GUIDED Custom mode; guided mode; Stabilize; Manual input; Armed"
+  },
+  {
+    "nr_gps_online": 2,
+    "position": {
+      "heading": 169.55,
+      "alt": 15.08,
+      "relative_alt": 15,
+      "lon": -0.3459351,
+      "lat": 39.4812383
+    },
+    "type": "MAV_TYPE_QUADROTOR",
+    "battery": 0,
+    "version": "4.5.3",
+    "time_boot_ms": 1858057,
+    "speed": {
+      "vx": 0.01,
+      "vy": -0.01,
+      "vz": 0
+    },
+    "status": "OK",
+    "flight_mode": "GUIDED Custom mode; guided mode; Stabilize; Manual input; Armed"
+  },
+  {
+    "nr_gps_online": 2,
+    "position": {
+      "heading": 169.55,
+      "alt": 15.08,
+      "relative_alt": 15,
+      "lon": -0.3459351,
+      "lat": 39.4812383
+    },
+    "type": "MAV_TYPE_QUADROTOR",
+    "battery": 0,
+    "version": "4.5.3",
+    "time_boot_ms": 1859055,
+    "speed": {
+      "vx": 0.01,
+      "vy": -0.01,
+      "vz": 0
+    },
+    "status": "OK",
+    "flight_mode": "GUIDED Custom mode; guided mode; Stabilize; Manual input; Armed"
+  },
+  {
+    "nr_gps_online": 2,
+    "position": {
+      "heading": 169.54,
+      "alt": 15.08,
+      "relative_alt": 15,
+      "lon": -0.3459351,
+      "lat": 39.4812383
+    },
+    "type": "MAV_TYPE_QUADROTOR",
+    "battery": 0,
+    "version": "4.5.3",
+    "time_boot_ms": 1860057,
+    "speed": {
+      "vx": 0.01,
+      "vy": -0.01,
+      "vz": 0
+    },
+    "status": "OK",
+    "flight_mode": "GUIDED Custom mode; guided mode; Stabilize; Manual input; Armed"
+  },
+  {
+    "nr_gps_online": 2,
+    "position": {
+      "heading": 169.54,
+      "alt": 15.08,
+      "relative_alt": 15,
+      "lon": -0.3459351,
+      "lat": 39.4812383
+    },
+    "type": "MAV_TYPE_QUADROTOR",
+    "battery": 0,
+    "version": "4.5.3",
+    "time_boot_ms": 1861055,
+    "speed": {
+      "vx": 0.01,
+      "vy": -0.01,
+      "vz": 0
+    },
+    "status": "OK",
+    "flight_mode": "GUIDED Custom mode; guided mode; Stabilize; Manual input; Armed"
+  },
+  {
+    "nr_gps_online": 2,
+    "position": {
+      "heading": 169.55,
+      "alt": 15.08,
+      "relative_alt": 15,
+      "lon": -0.3459351,
+      "lat": 39.4812383
+    },
+    "type": "MAV_TYPE_QUADROTOR",
+    "battery": 0,
+    "version": "4.5.3",
+    "time_boot_ms": 1862057,
+    "speed": {
+      "vx": 0.01,
+      "vy": -0.01,
+      "vz": 0
+    },
+    "status": "OK",
+    "flight_mode": "GUIDED Custom mode; guided mode; Stabilize; Manual input; Armed"
+  },
+  {
+    "nr_gps_online": 2,
+    "position": {
+      "heading": 169.55,
+      "alt": 15.08,
+      "relative_alt": 15,
+      "lon": -0.3459351,
+      "lat": 39.4812383
+    },
+    "type": "MAV_TYPE_QUADROTOR",
+    "battery": 0,
+    "version": "4.5.3",
+    "time_boot_ms": 1863055,
+    "speed": {
+      "vx": 0.01,
+      "vy": -0.01,
+      "vz": 0
+    },
+    "status": "OK",
+    "flight_mode": "GUIDED Custom mode; guided mode; Stabilize; Manual input; Armed"
+  },
+  {
+    "nr_gps_online": 2,
+    "position": {
+      "heading": 169.55,
+      "alt": 15.08,
+      "relative_alt": 15,
+      "lon": -0.3459351,
+      "lat": 39.4812383
+    },
+    "type": "MAV_TYPE_QUADROTOR",
+    "battery": 0,
+    "version": "4.5.3",
+    "time_boot_ms": 1864057,
+    "speed": {
+      "vx": 0.01,
+      "vy": -0.01,
+      "vz": 0
+    },
+    "status": "OK",
+    "flight_mode": "GUIDED Custom mode; guided mode; Stabilize; Manual input; Armed"
+  },
+  {
+    "nr_gps_online": 2,
+    "position": {
+      "heading": 169.54,
+      "alt": 15.08,
+      "relative_alt": 15,
+      "lon": -0.3459351,
+      "lat": 39.4812383
+    },
+    "type": "MAV_TYPE_QUADROTOR",
+    "battery": 0,
+    "version": "4.5.3",
+    "time_boot_ms": 1865055,
+    "speed": {
+      "vx": 0.01,
+      "vy": -0.01,
+      "vz": 0
+    },
+    "status": "OK",
+    "flight_mode": "GUIDED Custom mode; guided mode; Stabilize; Manual input; Armed"
+  },
+  {
+    "nr_gps_online": 2,
+    "position": {
+      "heading": 169.55,
+      "alt": 15.08,
+      "relative_alt": 15,
+      "lon": -0.3459351,
+      "lat": 39.4812383
+    },
+    "type": "MAV_TYPE_QUADROTOR",
+    "battery": 0,
+    "version": "4.5.3",
+    "time_boot_ms": 1866057,
+    "speed": {
+      "vx": 0.01,
+      "vy": -0.01,
+      "vz": 0
+    },
+    "status": "OK",
+    "flight_mode": "GUIDED Custom mode; guided mode; Stabilize; Manual input; Armed"
+  },
+  {
+    "nr_gps_online": 2,
+    "position": {
+      "heading": 169.54,
+      "alt": 15.08,
+      "relative_alt": 15,
+      "lon": -0.3459351,
+      "lat": 39.4812383
+    },
+    "type": "MAV_TYPE_QUADROTOR",
+    "battery": 0,
+    "version": "4.5.3",
+    "time_boot_ms": 1867055,
+    "speed": {
+      "vx": 0.01,
+      "vy": -0.01,
+      "vz": 0
+    },
+    "status": "OK",
+    "flight_mode": "GUIDED Custom mode; guided mode; Stabilize; Manual input; Armed"
+  },
+  {
+    "nr_gps_online": 2,
+    "position": {
+      "heading": 169.55,
+      "alt": 15.08,
+      "relative_alt": 15,
+      "lon": -0.3459351,
+      "lat": 39.4812383
+    },
+    "type": "MAV_TYPE_QUADROTOR",
+    "battery": 0,
+    "version": "4.5.3",
+    "time_boot_ms": 1868057,
+    "speed": {
+      "vx": 0.01,
+      "vy": -0.01,
+      "vz": 0
+    },
+    "status": "OK",
+    "flight_mode": "GUIDED Custom mode; guided mode; Stabilize; Manual input; Armed"
+  },
+  {
+    "nr_gps_online": 2,
+    "position": {
+      "heading": 169.55,
+      "alt": 15.08,
+      "relative_alt": 15,
+      "lon": -0.3459351,
+      "lat": 39.4812383
+    },
+    "type": "MAV_TYPE_QUADROTOR",
+    "battery": 0,
+    "version": "4.5.3",
+    "time_boot_ms": 1869055,
+    "speed": {
+      "vx": 0.01,
+      "vy": -0.01,
+      "vz": 0
+    },
+    "status": "OK",
+    "flight_mode": "GUIDED Custom mode; guided mode; Stabilize; Manual input; Armed"
   }
 ]
