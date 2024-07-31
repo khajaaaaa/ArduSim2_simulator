@@ -14,15 +14,31 @@ const truncateDecimal = (number) => {
   return number; // Return as is if not a number
 };
 
-const DroneInfo = ({ selectedDrone, selectedTime, trajectory }) => {
+const DroneInfo = ({ selectedDrone, selectedTime, trajectory, currentTime }) => {
   const [showCesiumMap, setShowCesiumMap] = useState(false);
 
   const handleClick = () => {
     setShowCesiumMap(!showCesiumMap);
   };
 
+  const lastTimestamp = trajectory.length > 0 ? trajectory[trajectory.length - 1].time_boot_ms : 0;
+  const timeSinceLastData = currentTime - lastTimestamp;
+
+  if (timeSinceLastData > 1200) {
+    return null;
+  }
+
   return (
     <div className="drone-info-container">
+       <div>
+        <button onClick={handleClick}>{showCesiumMap ? 'Close 3D View' : 'Show 3D View'}</button>
+      </div>
+      {showCesiumMap && (
+        <div className="cesium-overlay">
+          <button onClick={handleClick}>Close 3D View</button>
+          <CesiumMap droneData={selectedDrone} trajectory={trajectory || []} />
+        </div>
+      )}
       <h2>Drone Information</h2>
       <p><strong>Drone ID:</strong> {selectedDrone.drone_id}</p>
       <p><strong>Time Boot MS:</strong> {selectedTime}</p>
@@ -43,15 +59,6 @@ const DroneInfo = ({ selectedDrone, selectedTime, trajectory }) => {
         <li><strong>VY:</strong> {truncateDecimal(selectedDrone.speed.vy)}</li>
         <li><strong>VZ:</strong> {truncateDecimal(selectedDrone.speed.vz)}</li>
       </ul>
-      <div>
-        <button onClick={handleClick}>{showCesiumMap ? 'Close 3D View' : 'Show 3D View'}</button>
-      </div>
-      {showCesiumMap && (
-        <div className="cesium-overlay">
-          <button onClick={handleClick}>Close 3D View</button>
-          <CesiumMap droneData={selectedDrone} trajectory={trajectory || []} />
-        </div>
-      )}
     </div>
   );
 };

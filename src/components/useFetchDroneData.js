@@ -1,82 +1,68 @@
 import { useEffect, useRef, useCallback } from 'react';
 
-const colors = ['blue', 'red', 'green', 'orange', 'purple', 'brown', 'pink', 'yellow', 'cyan', 'magenta'];
+const colors = [
+  'blue', 'red', 'green', 'orange', 'purple', 'brown', 'pink', 'yellow', 'cyan', 'magenta',
+  'teal', 'lime', 'indigo', 'violet', 'gold', 'silver', 'bronze', 'coral', 'turquoise', 'navy',
+  'maroon', 'olive', 'chocolate', 'salmon', 'plum', 'orchid', 'tan', 'lavender', 'beige', 'azure',
+  'crimson', 'khaki', 'peach', 'mint', 'aqua', 'apricot', 'amber', 'emerald', 'jade', 'sapphire',
+  'ruby', 'rose', 'periwinkle', 'umber', 'emerald', 'charcoal', 'denim', 'fuchsia', 'amethyst'
+];
 
-const useFetchDroneData = (setDroneData, setMaxTime, setMinTime, setDroneColors, setCurrentTime, isPlaying) => {
-  const previousDataRef = useRef(null);
+
+
+const useFetchDroneData = (setDroneData, setMaxTime, setMinTime, setDroneColors, setCurrentTime, isPlaying, isScrubbing) => {
+  const allDataRef = useRef({});
 
   const fetchData = useCallback(async () => {
     try {
       const response = await fetch('http://localhost:3001/data.json');
       if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-
-      const data = await response.json();
-      if (!data.length) {
-        // Handle case where data is empty
-        setDroneData({});
-        setMaxTime(0);
-        setMinTime(0);
-        setCurrentTime(0);
-        setDroneColors({});
-        return;
-      }
-
-      // Filter out entries with zero timestamps
-      const filteredData = data.filter(item => item.time_boot_ms > 0);
-
-      const groupedData = filteredData.reduce((acc, item) => {
-        if (!acc[item.drone_id]) acc[item.drone_id] = [];
-        acc[item.drone_id].push({
-          ...item,
-          coordinates: [item.position.lat, item.position.lon],
-          popupText: `Drone ID: ${item.drone_id}, Time: ${item.time_boot_ms}`,
-        });
-        return acc;
-      }, {});
-
-      for (const droneId in groupedData) {
-        groupedData[droneId].sort((a, b) => a.time_boot_ms - b.time_boot_ms);
-      }
-
-      const allTimes = filteredData.map(item => item.time_boot_ms);
-      const maxTime = Math.max(...allTimes);
-      const minTime = Math.min(...allTimes);
-
-      if (JSON.stringify(previousDataRef.current) !== JSON.stringify(groupedData)) {
-        setDroneData(groupedData);
-        setMaxTime(maxTime);
-        setMinTime(minTime);
-
-        if (!isPlaying) {
-          setCurrentTime(maxTime);
+      const newData = await response.json();
+      
+      setDroneData(prevData => {
+        const updatedData = { ...prevData };
+        if (!updatedData[newData.drone_id]) {
+          updatedData[newData.drone_id] = [];
         }
-
-        const uniqueDroneIds = Object.keys(groupedData);
-        const colorMap = {};
-        uniqueDroneIds.forEach((droneId, index) => {
-          colorMap[droneId] = colors[index % colors.length];
+        updatedData[newData.drone_id].push({
+          ...newData,
+          coordinates: [newData.position.lat, newData.position.lon],
+          popupText: `Drone ID: ${newData.drone_id}, Time: ${newData.time_boot_ms}`,
         });
-        setDroneColors(colorMap);
+        return updatedData;
+      });
+  
+      setLatestDataTime(prevTime => Math.max(prevTime, newData.time_boot_ms));
+      setMaxTime(prevMax => Math.max(prevMax, newData.time_boot_ms));
+      setMinTime(prevMin => prevMin === 0 ? newData.time_boot_ms : Math.min(prevMin, newData.time_boot_ms));
+  
+      if (isLiveMode) {
+        setSimulationTime(newData.time_boot_ms);
       }
-
-      previousDataRef.current = groupedData;
+  
+      // Update drone colors if needed
+      setDroneColors(prevColors => {
+        if (!prevColors[newData.drone_id]) {
+          const newColor = `hsl(${Object.keys(prevColors).length * 137.5 % 360}, 70%, 50%)`;
+          return { ...prevColors, [newData.drone_id]: newColor };
+        }
+        return prevColors;
+      });
+  
     } catch (error) {
       console.error('Failed to fetch data:', error.message);
-      // Handle fetch error
-      setDroneData({});
-      setMaxTime(0);
-      setMinTime(0);
-      setCurrentTime(0);
-      setDroneColors({});
     }
-  }, [setDroneData, setMaxTime, setMinTime, setDroneColors, setCurrentTime, isPlaying]);
+  }, [isLiveMode]);
 
   useEffect(() => {
     fetchData(); // Fetch data initially
-
-    const interval = setInterval(fetchData, 100); // Fetch data every 5 seconds
+    const interval = setInterval(fetchData, 1000); // Fetch data every second
     return () => clearInterval(interval); // Cleanup interval on component unmount or dependency change
-  }, [fetchData, isPlaying]); // Trigger fetchData on isPlaying change or initial load
+  }, [fetchData]);
+
+  return allDataRef.current;
 };
 
 export default useFetchDroneData;
+
+

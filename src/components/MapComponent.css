@@ -88,8 +88,8 @@
 .timeline-container {
   position: fixed;
   bottom: 10px;
-  left: 10%; /* Adjust to ensure it doesn't overlap with the drone info */
-  width: 80%; /* Adjust to ensure it doesn't overlap with the drone info */
+  left: 10%; 
+  width: 80%;
   text-align: center;
   text-emphasis-color: black;
   z-index: 1000;
